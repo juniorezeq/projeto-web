@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:b="http://bootsfaces.net/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+	<meta charset="UTF-8" />
+	<title>Projeto Web - Menu</title>
+	<link type="text/css" rel="stylesheet"
+		href="#{facesContext.externalContext.requestContextPath}/resources/css/estilo.css" />
+</h:head>
+
+<h:body style="padding: 60px;">
+
+	<ui:composition template="/view/layout/Layout.xhtml">
+
+		<ui:define name="content">
+			<b:container style="width:980px">
+				<p:fieldset legend="Perfil de Usuário">
+					<h:form>
+
+						<p:outputLabel value="Usuário Logado: #{loginBean.usuario.login}" />
+						<br></br>
+						<p:outputLabel value="Tipo de Usuário: #{loginBean.usuario.tipo}" />
+						<br></br>
+						<p:outputLabel value="último Acesso: #{loginBean.usuario.dataDoUltimoAcesso}" />
+						<br></br>
+						<p:outputLabel value="Alterar Senha:" for="cadastroSenha"  />
+						<p:password id="cadastroSenha"
+							value="#{LoginBean.usuario.senha}" size="40" feedback="true" required="true" />
+							<p:commandButton value="Alterar" action="#{loginBean.atualizaUsuario()}"
+							process="@form" update="@form" icon="fa fa-fw fa-save" />
+					</h:form>
+
+				</p:fieldset>
+			</b:container>
+		</ui:define>
+
+	</ui:composition>
+
+
+
+</h:body>
+
+</html>
