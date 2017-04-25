@@ -24,7 +24,6 @@
 							<p:outputLabel value="Nome Usuario:" for="cadastroNome" />
 							<p:inputText id="cadastroNome"
 								value="#{cadastroBean.usuario.login}" size="40" />
-
 							<p:outputLabel value="Senha:" for="cadastroSenha" />
 							<p:password id="cadastroSenha"
 								value="#{cadastroBean.usuario.senha}" size="40" feedback="true" />
@@ -32,7 +31,6 @@
 							<p:selectOneRadio id="tipoUsuario" value="#{cadastroBean.usuario.tipo}">
 								<f:selectItem itemLabel="Administrador" itemValue="Administrador" />
 								<f:selectItem itemLabel="Comum" itemValue="Comum" />
-
 							</p:selectOneRadio>
 						</h:panelGrid>
 						<br></br>
@@ -57,8 +55,10 @@
 								</p:column>
 							</p:dataTable>
 						</p:overlayPanel>
-						<b:messages autoUpdate="true" showDetail="true" closable="true"
-							style="60%" />
+							<p:messages id="msg" autoUpdate="true" showDetail="true"
+							closable="true" style="60%">
+							<p:effect type="pulsate" event="load" delay="500" />
+						</p:messages>
 					</h:form>
 				</p:fieldset>
 

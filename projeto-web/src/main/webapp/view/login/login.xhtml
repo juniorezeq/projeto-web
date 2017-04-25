@@ -38,7 +38,10 @@
 
 				</h:panelGrid>
 			</p:panel>
-			<p:messages autoUpdate="true" showDetail="true" closable="true" />
+				<p:messages id="msg" autoUpdate="true" showDetail="true"
+							closable="true" style="60%">
+							<p:effect type="pulsate" event="load" delay="500" />
+						</p:messages>
 		</h:form>
 	</center>
 </h:body>

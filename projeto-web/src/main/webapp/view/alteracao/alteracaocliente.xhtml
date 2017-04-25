@@ -17,17 +17,20 @@
 
 		<ui:define name="content">
 			<b:container style="width:980px">
-				<p:fieldset legend="Cadastro Cliente">
-					<h:form id="frmCadastroCliente">
+				<p:fieldset legend="Alteração Cliente">
+					<h:form id="frmAlteracaoCliente">
 						<p:panelGrid columns="4" style="width: 60%;">
 							<p:outputLabel value="CNPJ: " for="cadastroCnpj" />
-							<p:inputText id="cadastroCnpj"
+							<p:inputMask id="cadastroCnpj"
+								title="Digite Somente números do CNPJ" mask="99.999.999/9999-99"
 								value="#{clienteBean.cliente.cnpj}" size="20" required="true">
 								<p:ajax event="change" listener="#{clienteBean.checarCnpj()}"
 									onstart="PF('statusDialog').show()"
-							onsuccess="PF('statusDialog').hide()" update="@all" />
-							<p:tooltip id="toolTipFocus" for="cadastroCnpj" showEvent="focus" hideEvent="blur" />
-							</p:inputText>
+									onsuccess="PF('statusDialog').hide()"
+									update="msg cadastroNome cadastroCnpj cadastroRua cadastroNumero cadastroBairro cadastroCep cadastroCidade cadastroEstado cadastroSituacao cadastroTelefone" />
+								<p:tooltip id="toolTipFocus" for="cadastroCnpj"
+									showEvent="focus" hideEvent="blur" />
+							</p:inputMask>
 							<p:outputLabel value="Nome:" for="cadastroNome" />
 							<p:inputText id="cadastroNome"
 								value="#{clienteBean.cliente.nome}" size="40" required="true" />
@@ -59,7 +62,6 @@
 
 							<p:outputLabel value="Situação:" for="cadastroSituacao" />
 							<p:inputText id="cadastroSituacao"
-							
 								value="#{clienteBean.cliente.situacao}" size="40"
 								required="true" />
 
@@ -68,53 +70,67 @@
 								value="#{clienteBean.cliente.telefone}" size="40"
 								required="true" />
 
-							<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
-								closable="false" resizable="false" showHeader="false">
-								<p:graphicImage value="/imagens/loading1.gif" />
-							</p:dialog>
-
-
-
 
 						</p:panelGrid>
 						<br></br>
+
 						<p:commandButton value="Alterar"
 							action="#{clienteBean.atualizaCliente()}"
-							icon="fa fa-fw fa-refresh" process="@form" update="@form" />
+							icon="fa fa-fw fa-refresh" process="@form" update="@form">
+						</p:commandButton>
 
 						<p:commandButton value="Excluir"
-							action="#}"
-							icon="fa fa-fw fa-trash" process="@form" update="@form">
-							
-								<p:confirm header="Não poderá ser resturado!" message="Tem certeza que deseja Excluir?" icon="ui-icon-alert" />
-							
-							</p:commandButton>
-						
+							action="#{clienteBean.excluirCliente()}" icon="fa fa-fw fa-trash"
+							process="@form" update="@form">
+							<p:confirm header="Não poderá ser resturado!"
+								message="Tem certeza que deseja Excluir?" icon="ui-icon-alert" />
+						</p:commandButton>
+
+						<p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+							<p:commandButton value="Sim" type="button"
+								styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+							<p:commandButton value="Não" type="button"
+								styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+						</p:confirmDialog>
 
 						<p:commandButton id="clientesBtn" value="Clientes Cadastrados"
-							type="button" icon="fa fa-fw fa-folder-open-o"
-							style="margin-left:5px">
-						</p:commandButton>
+							icon="fa fa-fw fa-folder-open-o" type="button"
+							style="margin-left:5px" />
 						<p:overlayPanel id="clientesPanel" for="clientesBtn"
-							hideEffect="fade" dynamic="true" style="width:600px">
+							hideEffect="fade" dynamic="true" style="width:800px">
 							<p:dataTable var="clientes"
 								value="#{clienteBean.clientessCadastrados()}" rows="20"
 								paginator="true">
-								<p:column headerText="Cnpj">
+								<p:column headerText="CNPJ">
 									<h:outputText value="#{clientes.cnpj}" />
 								</p:column>
-								<p:column headerText="Nome">
+								<p:column headerText="nome">
 									<h:outputText value="#{clientes.nome}" />
 								</p:column>
-								<p:column headerText="UF">
+								<p:column headerText="endereco">
+									<h:outputText value="#{clientes.logradouro}" />
+								</p:column>
+								<p:column headerText="cidade">
+									<h:outputText value="#{clientes.municipio}" />
+								</p:column>
+								<p:column headerText="estado">
 									<h:outputText value="#{clientes.uf}" />
 								</p:column>
-							</p:dataTable>
 
+							</p:dataTable>
 						</p:overlayPanel>
-						<b:messages id="msg" autoUpdate="true" showDetail="true"
-							closable="true" style="60%" />
+
+						<p:messages id="msg" autoUpdate="true" showDetail="true"
+							closable="true" style="60%">
+							<p:effect type="pulsate" event="load" delay="500" />
+						</p:messages>
+						
 					</h:form>
+
+					<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+						closable="false" resizable="false" showHeader="false">
+						<p:graphicImage value="/imagens/loading1.gif" />
+					</p:dialog>
 
 				</p:fieldset>
 

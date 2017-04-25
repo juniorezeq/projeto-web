@@ -1,12 +1,14 @@
 package br.com.fsma.projeto_web.modelo.negocio;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -18,7 +20,7 @@ public class Cliente implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
+	@Column(name = "id_cliente")
 	private Long id;
 	@Column(name = "nome", length = 80, nullable = false, unique = true)
 	private String nome;
@@ -41,7 +43,18 @@ public class Cliente implements Serializable {
 	@Column(name = "cnpj", length = 20, nullable = false)
 	private String cnpj;
 	
+	@OneToMany(mappedBy="cliente")
+	 private List<Locacao> listaLocacoes;
 	
+
+	public List<Locacao> getListaLocacoes() {
+		return listaLocacoes;
+	}
+
+	public void setListaLocacoes(List<Locacao> listaLocacoes) {
+		this.listaLocacoes = listaLocacoes;
+	}
+
 	public String getBairro() {
 		return bairro;
 	}

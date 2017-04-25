@@ -67,14 +67,16 @@
 
 							</p:dataTable>
 						</p:overlayPanel>
-						<b:messages autoUpdate="true" showDetail="true" closable="true"
-							style="60%" />
+
 						<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 							closable="false" resizable="false" showHeader="false">
 							<p:graphicImage value="/imagens/loading1.gif" />
 						</p:dialog>
 					</h:form>
-
+					<p:messages id="msg" autoUpdate="true" showDetail="true"
+						closable="true" style="60%">
+						<p:effect type="pulsate" event="load" delay="500" />
+					</p:messages>
 
 				</p:fieldset>
 

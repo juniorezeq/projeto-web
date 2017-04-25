@@ -25,17 +25,18 @@ public class EquipamentoBean implements Serializable {
 	 * criado por Ezequiel
 	 */
 	private static final String USUARIO_LOGADO = "usuarioLogado";
-	
 
 	@Inject
 	private HttpSession session;
 	@Inject
 	private EquipamentoDao equipamentoDao;
+	@Inject
 	private Equipamento equipamento = new Equipamento();
+	@Inject
 	private Usuario usuario;
 
 	private static final long serialVersionUID = 1L;
-    
+
 	@PostConstruct
 	public void init() {
 		System.out.println("EquiapamentoBean.init();");
@@ -46,7 +47,6 @@ public class EquipamentoBean implements Serializable {
 		equipamento = new Equipamento();
 		equipamento.setSituacao(situacao.Disponivel);
 	}
-
 
 	@Transacional
 	public String iniciarCadastroEquipamentos() {
@@ -66,10 +66,7 @@ public class EquipamentoBean implements Serializable {
 			equipamento = recebido;
 		} else {
 			equipamento = new Equipamento();
-			String mensagem = "Equipamento não foi encontrado verifique a TAG digitada";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", mensagem));
-
+			mensagemErro("Equipamento não foi encontrado verifique a TAG digitada");
 		}
 		System.out.println(equipamento);
 		return null;
@@ -79,39 +76,29 @@ public class EquipamentoBean implements Serializable {
 	public String verificaEquipamento() {
 		Equipamento recebido = equipamentoDao.buscaPorTag(equipamento.getTag());
 		if (recebido != null) {
-			System.out.println("ja existe tag:" + recebido.getTag());
-			String mensagem = "A Tag digitada já foi cadastrada";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", mensagem));
-			equipamento = new Equipamento();			
-		} 
+			 mensagemErro("A Tag digitada já foi cadastrada");
+			equipamento = new Equipamento();
+		}
 		return null;
 	}
-	
-	
+
 	@Transacional
 	public String incluir() {
 		if (equipamento.getTag().isEmpty() || equipamento.getDescricao().isEmpty()) {
-			String mensagem = "Todos os campos devem ser preenchidos";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!!", mensagem));
+			mensagemErro ("Todos os campos devem ser preenchidos");
 			return null;
 		}
 		boolean existe = equipamentoDao.existeTag(equipamento.getTag());
 		if (existe == false) {
 			equipamentoDao.adiciona(equipamento);
 			System.out.println("init.Cadastro()");
-			String mensagem = "Cadastrado com sucesso";
+			mensagemSucesso("Cadastrado com sucesso");
 			equipamento = new Equipamento();
 			equipamento.setSituacao(situacao.Disponivel);
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!!", mensagem));
 			return null;
 		}
 		System.out.println("init.Cadastro()");
-		String mensagem = "Esta Tag já esta associada a outro equipamento";
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!!", mensagem));
+		mensagemErro( "Esta Tag já esta associada a outro equipamento");
 		equipamento = new Equipamento();
 		equipamento.setSituacao(situacao.Disponivel);
 		return null;
@@ -129,14 +116,9 @@ public class EquipamentoBean implements Serializable {
 	public String atualizaEquipamento() {
 		try {
 			equipamentoDao.atualiza(equipamento);
-			String mensagem = "Atualizada Corretamente!";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", mensagem));
-
+			mensagemSucesso( "Atualizada Corretamente!");
 		} catch (Exception e) {
-			String mensagem = "Não Atualizada";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", mensagem));
+			mensagemErro( "Não Atualizada");
 		}
 		equipamento = new Equipamento();
 		equipamento.setSituacao(situacao.Disponivel);
@@ -147,14 +129,9 @@ public class EquipamentoBean implements Serializable {
 	public String excluiEquipamento() {
 		try {
 			equipamentoDao.remove(equipamento);
-			String mensagem = "Excluido corretamente!";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", mensagem));
-
+			mensagemSucesso("Excluido corretamente!");
 		} catch (Exception e) {
-			String mensagem = "Não foi possivel Excluir";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", mensagem));
+			mensagemErro("Não foi possivel Excluir");
 		}
 		equipamento = new Equipamento();
 		equipamento.setSituacao(situacao.Disponivel);
@@ -166,6 +143,17 @@ public class EquipamentoBean implements Serializable {
 		List<Equipamento> equipamentos = new ArrayList<Equipamento>();
 		equipamentos = equipamentoDao.listaTodosPaginada(0, 100);
 		return equipamentos;
+	}
+
+	private void mensagemSucesso(String mensagem) {
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!!", mensagem));
+	}
+
+	private void mensagemErro(String mensagem) {
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", mensagem));
+
 	}
 
 }

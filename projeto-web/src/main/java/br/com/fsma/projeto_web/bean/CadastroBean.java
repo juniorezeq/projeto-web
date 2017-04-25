@@ -52,26 +52,18 @@ public class CadastroBean implements Serializable {
 	public String incluir() {
 		usuario.setDataDoCadastro(LocalDateTime.now());
 		if (usuario.getLogin().isEmpty() || usuario.getSenha().isEmpty()) {
-			String mensagem = "Todos os campos devem ser preenchidos";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!!", mensagem));
+			 mensagemErro("Todos os campos devem ser preenchidos");
 			return null;
 		}
 		boolean existe = usuarioDao.existeLogin(usuario.getLogin());
 		if (existe == false) {
 			usuarioDao.adiciona(usuario);
 			System.out.println("init.Cadastro()");
-			String mensagem = "Cadastrado com sucesso";
 			usuario = new Usuario();
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!!", mensagem));
-			return null;
+		    mensagemSucesso("Cadastrado com sucesso");
+		return null;
 		}
-		System.out.println("init.Cadastro()");
-		String mensagem = "Não foi possivel realizar o cadastro usuário já existe";
-		FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_WARN, "Erro!!", mensagem));
-
+		mensagemErro("Não foi possivel realizar o cadastro usuário já existe");
 		return null;
 	}
 
@@ -94,16 +86,22 @@ public class CadastroBean implements Serializable {
 	public void atualizaUsuario() {
 		try {
 			usuarioDao.atualiza(usuario);
-			String mensagem = "Alterado com sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!!", mensagem));
+			mensagemSucesso( "Alterado com sucesso");
 
 		} catch (Exception e) {
-			String mensagem = "Erro não foi possivel atualizar";
-			FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", mensagem));
-
+		    mensagemErro("Erro não foi possivel atualizar");
 		}
 	}
 
+	private void mensagemSucesso(String mensagem) {
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!!", mensagem));
+	}
+
+	private void mensagemErro(String mensagem) {
+		FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", mensagem));
+
+	}
+	
 }

@@ -1,8 +1,7 @@
 package br.com.fsma.projeto_web.modelo.negocio;
 
 import java.io.Serializable;
-
-
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,6 +9,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -33,9 +33,18 @@ public class Equipamento implements Serializable {
 	private situacao situacao;
 	
 	public enum situacao {Alugado, Disponivel,EmManutencao, Obsoleto };
+	
+	@ManyToMany
+	private List<Locacao> locacoes;
 
-	
-	
+	public List<Locacao> getLocacoes() {
+		return locacoes;
+	}
+
+	public void setLocacoes(List<Locacao> locacoes) {
+		this.locacoes = locacoes;
+	}
+
 	public situacao getSituacao() {
 		return situacao;
 	}

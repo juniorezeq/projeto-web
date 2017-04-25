@@ -32,8 +32,11 @@ public class ClienteBean implements Serializable {
 	private HttpSession session;
 	@Inject
 	private ClienteDao clienteDao;
+	@Inject
 	private Cliente cliente = new Cliente();
+	@Inject
 	private ApiCNPJ apiCnpj;
+	@Inject
 	private Usuario usuario;
 
 	private static final long serialVersionUID = 1L;
@@ -67,14 +70,13 @@ public class ClienteBean implements Serializable {
 
 	@Transacional
 	public String checarCnpj() {
-		System.out.println(cliente.getCnpj());
-		Cliente recebido = clienteDao.buscaPorCnpj(cliente.getCnpj());
-		if (recebido != null) {
-			this.cliente = recebido;
-		} else {
-			cliente = new Cliente();
-			mensagemErro("Cliente não foi encontrado verifique o CNPJ digitado");
-		}
+		Cliente clientebuscaDao = clienteDao.buscaPorCnpj(cliente.getCnpj());
+		if (clientebuscaDao == null) {
+			mensagemErro("Cliente não foi encontrado verifique o CNPJ digitado");			
+            return null;
+            }
+		System.out.println(clientebuscaDao.getCnpj());
+		cliente = clientebuscaDao;
 		return null;
 	}
 
@@ -128,17 +130,15 @@ public class ClienteBean implements Serializable {
 		cliente = new Cliente();
 		return null;
 	}
-
 	@Transacional
-	public String excluiCliente() {
+	public String excluirCliente() {
 		try {
 			clienteDao.remove(cliente);
-			mensagemSucesso("Excluido corretamente!");
-
+			mensagemSucesso ("Excluido corretamente!");
 		} catch (Exception e) {
 			mensagemErro("Não foi possivel Excluir");
 		}
-		cliente = new Cliente();
+		limpar();
 		return null;
 	}
 
