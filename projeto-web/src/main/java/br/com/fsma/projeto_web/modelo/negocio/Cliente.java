@@ -147,8 +147,7 @@ public class Cliente implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Cliente [id=" + id + ", nome=" + nome + ", uf=" + uf + ", logradouro=" + logradouro + ", municipio="
-				+ municipio + ", cnpj=" + cnpj + "]";
+		return "nome=" + nome + ", cnpj=" + cnpj;
 	}
 	
 	

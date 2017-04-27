@@ -20,12 +20,22 @@
 				<p:fieldset legend="Nova Locação">
 					<h:form id="frmCadastroCliente">
 						<p:panelGrid columns="4" style="width: 60%;">
-
-							<p:outputLabel for="cliente" value="Cliente: " />
-							<p:selectOneMenu id="cliente" value="#{locacaoBean.cliente}"
-								style="width:150px">
-								<f:selectItems value="#{locacaoBean.listarClientes()}" />
-							</p:selectOneMenu>
+						
+						<p:outputLabel value="CNPJ Cliente: " for="cadastroCnpj" />
+							<p:inputMask id="cadastroCnpj"
+								title="Digite Somente números do CNPJ" mask="99.999.999/9999-99"
+								value="#{locacaoBean.cliente.cnpj}" size="20" required="true">
+								<p:ajax event="change" listener="#{locacaoBean.checarCnpj()}"
+									onstart="PF('statusDialog').show()"
+									onsuccess="PF('statusDialog').hide()"
+									update="msg cadastroNome" />
+								<p:tooltip id="toolTipFocus" for="cadastroCnpj"
+									showEvent="focus" hideEvent="blur" />
+							</p:inputMask>
+							<p:outputLabel value="Nome:" for="cadastroNome" />
+							<p:inputText id="cadastroNome"
+								value="#{locacaoBean.cliente.nome}" size="40" required="true" />
+							
 
 							<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 								closable="false" resizable="false" showHeader="false">

@@ -113,6 +113,18 @@ public class LocacaoBean implements Serializable {
 		clientes = clienteDao.listaTodosPaginada(0, 100);
 		return clientes;
 	}
+	
+	@Transacional
+	public String checarCnpj() {
+		Cliente clientebuscaDao = clienteDao.buscaPorCnpj(cliente.getCnpj());
+		if (clientebuscaDao == null) {
+			mensagemErro("Cliente não foi encontrado verifique o CNPJ digitado");			
+            return null;
+            }
+		System.out.println(clientebuscaDao.getCnpj());
+		cliente = clientebuscaDao;
+		return null;
+	}
 
 	private void mensagemSucesso(String mensagem) {
 		FacesContext.getCurrentInstance().addMessage(null,
