@@ -26,7 +26,7 @@
 								required="true">
 								<p:ajax event="change"
 									listener="#{equipamentoBean.verificaEquipamento()}"
-									update="@all" onstart="PF('statusDialog').show()"
+									update="cadastroDescricao cadastroFabricante msg" onstart="PF('statusDialog').show()"
 									onsuccess="PF('statusDialog').hide()" />
 							</p:inputText>
 
