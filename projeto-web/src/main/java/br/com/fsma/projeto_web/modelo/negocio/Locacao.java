@@ -119,13 +119,13 @@ public class Locacao implements Serializable {
 	}
 	
 	public void converterDataInicio(Date dataIni){
-		Instant instant = Instant.ofEpochMilli(dataIni.getTime());
-		dataInicio = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+		Instant instant = dataIni.toInstant();
+		dataInicio = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
 
 	public void converterDataFim(Date dataFinal){
-		Instant instant = Instant.ofEpochMilli(dataFinal.getTime());
-		dataFim = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+		Instant instant = dataFinal.toInstant();
+		dataFim = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
 	}
 
 }

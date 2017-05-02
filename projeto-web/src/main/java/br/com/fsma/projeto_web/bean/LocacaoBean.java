@@ -80,8 +80,9 @@ public class LocacaoBean implements Serializable {
 			locacao.setValorDiaria(valor1);
 			locacao.setValorTotal(valor2);
 			locacao.setCliente(cliente);
-			locacao.setDataInicio(LocalDateTime.of(dataInicio.getYear(),dataInicio.getMonth(), dataInicio.getDay(), 00, 00));
-			locacao.setDataFim(LocalDateTime.of(dataFim.getYear(),dataFim.getMonth(), dataFim.getDay(), 00, 00));
+			
+			locacao.converterDataInicio(dataInicio);
+			locacao.converterDataFim(dataFim);
 		    locacao.setDataRegistro(locacao.getDataInicio());
 		    locacaoDao.adiciona(locacao);
 			mensagemSucesso("Cadastrado com sucesso às " + dataFim.toString());
