@@ -1,11 +1,6 @@
 package br.com.fsma.projeto_web.bean;
 
 import java.io.Serializable;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -85,7 +80,7 @@ public class LocacaoBean implements Serializable {
 			locacao.converterDataFim(dataFim);
 		    locacao.setDataRegistro(locacao.getDataInicio());
 		    locacaoDao.adiciona(locacao);
-			mensagemSucesso("Cadastrado com sucesso às " + dataFim.toString());
+			mensagemSucesso("Cadastrado com sucesso" + "foram : " + locacao.quantidadeDias() + " dias");
 			limpar();
 			return null;
 		}catch (Exception e) {

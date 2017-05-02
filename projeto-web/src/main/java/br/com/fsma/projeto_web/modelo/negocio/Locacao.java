@@ -2,8 +2,9 @@ package br.com.fsma.projeto_web.modelo.negocio;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
@@ -16,7 +17,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-
 @Entity
 @Table(name = "tb_locacao")
 public class Locacao implements Serializable {
@@ -28,26 +28,37 @@ public class Locacao implements Serializable {
 	@Column(name = "id_locacao")
 	private Long id;
 	@Column(nullable = false, insertable = true, updatable = false)
-	private LocalDateTime dataRegistro;
+	private LocalDate dataRegistro;
 	@Column(nullable = false, insertable = true, updatable = false)
-	private LocalDateTime dataInicio;
+	private LocalDate dataInicio;
 	@Column(nullable = false, insertable = true, updatable = true)
-	private LocalDateTime dataFim;
+	private LocalDate dataFim;
 	@Column(nullable = false, insertable = true, updatable = true)
 	private Double valorDiaria;
 	@Column(name = "valorTotal")
 	private Double valorTotal;
-	
-	 @ManyToOne
-	 @JoinColumn(name="id_cliente", referencedColumnName="id_cliente")
-	 private Cliente cliente;
-	
+	private Long diarias;
+	@ManyToOne
+	@JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
+	private Cliente cliente;
+
 	@ManyToMany
 	private List<Equipamento> equipamentos;
-	
-	
-	
-   
+
+	public long quantidadeDias() {
+		long diferencaEmDias = ChronoUnit.DAYS.between(dataInicio, dataFim);
+		diarias = diferencaEmDias;
+		return diferencaEmDias;
+	}
+
+	public Long getDiarias() {
+		return diarias;
+	}
+
+	public void setDiarias(Long diarias) {
+		this.diarias = diarias;
+	}
+
 	public Double getValorTotal() {
 		return valorTotal;
 	}
@@ -64,27 +75,27 @@ public class Locacao implements Serializable {
 		this.equipamentos = equipamentos;
 	}
 
-	public LocalDateTime getDataRegistro() {
+	public LocalDate getDataRegistro() {
 		return dataRegistro;
 	}
 
-	public void setDataRegistro(LocalDateTime dataRegistro) {
+	public void setDataRegistro(LocalDate dataRegistro) {
 		this.dataRegistro = dataRegistro;
 	}
 
-	public LocalDateTime getDataInicio() {
+	public LocalDate getDataInicio() {
 		return dataInicio;
 	}
 
-	public void setDataInicio(LocalDateTime dataInicio) {
+	public void setDataInicio(LocalDate dataInicio) {
 		this.dataInicio = dataInicio;
 	}
 
-	public LocalDateTime getDataFim() {
+	public LocalDate getDataFim() {
 		return dataFim;
 	}
 
-	public void setDataFim(LocalDateTime dataFim) {
+	public void setDataFim(LocalDate dataFim) {
 		this.dataFim = dataFim;
 	}
 
@@ -114,18 +125,18 @@ public class Locacao implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Locação [id=" + id + ", cliente=" + cliente.getNome() + ", inicio=" + dataInicio + ", fim=" + dataFim + ", valorDiaria="
-				+ valorDiaria + ", valorTotal=" + valorTotal + "]";
-	}
-	
-	public void converterDataInicio(Date dataIni){
-		Instant instant = dataIni.toInstant();
-		dataInicio = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+		return "Locação [id=" + id + ", cliente=" + cliente.getNome() + ", inicio=" + dataInicio + ", fim=" + dataFim
+				+ ", valorDiaria=" + valorDiaria + ", valorTotal=" + valorTotal + "]";
 	}
 
-	public void converterDataFim(Date dataFinal){
+	public void converterDataInicio(Date dataIni) {
+		Instant instant = dataIni.toInstant();
+		dataInicio = instant.atZone(ZoneId.systemDefault()).toLocalDate();
+	}
+
+	public void converterDataFim(Date dataFinal) {
 		Instant instant = dataFinal.toInstant();
-		dataFim = instant.atZone(ZoneId.systemDefault()).toLocalDateTime();
+		dataFim = instant.atZone(ZoneId.systemDefault()).toLocalDate();
 	}
 
 }
