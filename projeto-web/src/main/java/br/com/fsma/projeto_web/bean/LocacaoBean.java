@@ -1,7 +1,13 @@
 package br.com.fsma.projeto_web.bean;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -28,9 +34,11 @@ public class LocacaoBean implements Serializable {
 	@Inject
 	private ClienteDao clienteDao;
 	@Inject
-	private Cliente cliente = new Cliente();
-	@Inject
 	private Locacao locacao;
+	@Inject
+	private Cliente cliente = new Cliente();
+	private Date dataInicio;
+	private Date dataFim;
 
 	private static final long serialVersionUID = 1L;
 
@@ -66,11 +74,19 @@ public class LocacaoBean implements Serializable {
 	@Transacional
 	public String incluirLocacao() {
 		try{
-			locacaoDao.adiciona(locacao);
-			mensagemSucesso("Cadastrado com sucesso");
+
+			double valor1 = 100.00;
+			double valor2 = 100000.00;
+			locacao.setValorDiaria(valor1);
+			locacao.setValorTotal(valor2);
+			locacao.setCliente(cliente);
+			locacao.setDataInicio(LocalDateTime.of(dataInicio.getYear(),dataInicio.getMonth(), dataInicio.getDay(), 00, 00));
+			locacao.setDataFim(LocalDateTime.of(dataFim.getYear(),dataFim.getMonth(), dataFim.getDay(), 00, 00));
+		    locacao.setDataRegistro(locacao.getDataInicio());
+		    locacaoDao.adiciona(locacao);
+			mensagemSucesso("Cadastrado com sucesso às " + dataFim.toString());
 			limpar();
 			return null;
-		
 		}catch (Exception e) {
 			mensagemErro("erro ao incluir locacao");
 			return null;
@@ -87,24 +103,28 @@ public class LocacaoBean implements Serializable {
 		this.cliente = cliente;
 	}
 
-	@Transacional
-	public String atualizaCliente() {
-		clienteDao.atualiza(cliente);
-		System.out.println("encontrado" + cliente.getNome());
-		mensagemSucesso("Atualizada Corretamente!");
-		cliente = new Cliente();
-		return null;
+	public Locacao getLocacao() {
+		return locacao;
 	}
-	@Transacional
-	public String excluirCliente() {
-		try {
-			clienteDao.remove(cliente);
-			mensagemSucesso ("Excluido corretamente!");
-		} catch (Exception e) {
-			mensagemErro("Não foi possivel Excluir");
-		}
-		limpar();
-		return null;
+
+	public void setLocacao(Locacao locacao) {
+		this.locacao = locacao;
+	}
+
+	public Date getDataInicio() {
+		return dataInicio;
+	}
+
+	public void setDataInicio(Date dataInicio) {
+		this.dataInicio = dataInicio;
+	}
+
+	public Date getDataFim() {
+		return dataFim;
+	}
+
+	public void setDataFim(Date dataFim) {
+		this.dataFim = dataFim;
 	}
 
 	@Transacional

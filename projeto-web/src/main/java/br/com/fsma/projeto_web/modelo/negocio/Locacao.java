@@ -1,7 +1,10 @@
 package br.com.fsma.projeto_web.modelo.negocio;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -115,6 +118,14 @@ public class Locacao implements Serializable {
 				+ valorDiaria + ", valorTotal=" + valorTotal + "]";
 	}
 	
-	
+	public void converterDataInicio(Date dataIni){
+		Instant instant = Instant.ofEpochMilli(dataIni.getTime());
+		dataInicio = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+	}
+
+	public void converterDataFim(Date dataFinal){
+		Instant instant = Instant.ofEpochMilli(dataFinal.getTime());
+		dataFim = LocalDateTime.ofInstant(instant, ZoneId.systemDefault());
+	}
 
 }
