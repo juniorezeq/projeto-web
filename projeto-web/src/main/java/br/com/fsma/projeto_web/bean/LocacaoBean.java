@@ -34,6 +34,7 @@ public class LocacaoBean implements Serializable {
 	private Cliente cliente = new Cliente();
 	private Date dataInicio;
 	private Date dataFim;
+	private double valorDiaria;
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,6 +47,11 @@ public class LocacaoBean implements Serializable {
 	@Transacional
 	public String iniciarCadastroLocacao() {
 		return "/view/cadastro/cadastrolocacao.xhtml?faces-redirect=true";
+	}
+	
+	@Transacional
+	public String CalcularDiarias(){
+		return null;
 	}
 
 	@Transacional
@@ -66,18 +72,16 @@ public class LocacaoBean implements Serializable {
 	}
 
 
+
 	@Transacional
 	public String incluirLocacao() {
 		try{
-
-			double valor1 = 100.00;
-			double valor2 = 100000.00;
-			locacao.setValorDiaria(valor1);
-			locacao.setValorTotal(valor2);
-			locacao.setCliente(cliente);
-			
+			locacao.setValorDiaria(valorDiaria);
 			locacao.converterDataInicio(dataInicio);
 			locacao.converterDataFim(dataFim);
+			int dias = locacao.quantidadeDias();
+			locacao.setValorTotal(valorDiaria*dias);
+			locacao.setCliente(cliente);
 		    locacao.setDataRegistro(locacao.getDataInicio());
 		    locacaoDao.adiciona(locacao);
 			mensagemSucesso("Cadastrado com sucesso" + "foram : " + locacao.quantidadeDias() + " dias");
@@ -90,6 +94,15 @@ public class LocacaoBean implements Serializable {
 		}
 	
 	
+
+
+	public double getValorDiaria() {
+		return valorDiaria;
+	}
+
+	public void setValorDiaria(double valorDiaria) {
+		this.valorDiaria = valorDiaria;
+	}
 
 	public Cliente getCliente() {
 		return cliente;

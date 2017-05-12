@@ -37,7 +37,7 @@ public class Locacao implements Serializable {
 	private Double valorDiaria;
 	@Column(name = "valorTotal")
 	private Double valorTotal;
-	private Long diarias;
+	private int diarias;
 	@ManyToOne
 	@JoinColumn(name = "id_cliente", referencedColumnName = "id_cliente")
 	private Cliente cliente;
@@ -45,19 +45,22 @@ public class Locacao implements Serializable {
 	@ManyToMany
 	private List<Equipamento> equipamentos;
 
-	public long quantidadeDias() {
+	public int quantidadeDias() {
 		long diferencaEmDias = ChronoUnit.DAYS.between(dataInicio, dataFim);
-		diarias = diferencaEmDias;
-		return diferencaEmDias;
-	}
-
-	public Long getDiarias() {
+		diarias = (int) (long)(diferencaEmDias);
 		return diarias;
 	}
 
-	public void setDiarias(Long diarias) {
+
+	public int getDiarias() {
+		return diarias;
+	}
+
+
+	public void setDiarias(int diarias) {
 		this.diarias = diarias;
 	}
+
 
 	public Double getValorTotal() {
 		return valorTotal;

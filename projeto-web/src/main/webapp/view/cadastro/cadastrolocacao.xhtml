@@ -37,17 +37,26 @@
 							<p:outputLabel for="dataInicio" value="Data Inicio:" />
 							<p:calendar id="dataInicio" value="#{locacaoBean.dataInicio}" />
 							<p:outputLabel for="dataFim" value="Data Fim:" />
-							<p:calendar id="dataFim" value="#{locacaoBean.dataFim}" />
+							<p:calendar id="dataFim" value="#{locacaoBean.dataFim}">
+								<p:ajax event="dateSelect"
+									listener="#{locacaoBean.CalcularDiarias()}" update="msg" />
+							</p:calendar>
+							<p:outputLabel value="Diária:" for="cadastroValor" />
+							<p:inputText id="cadastroValor"
+								value="#{locacaoBean.valorDiaria}" size="40" required="true">							
+							</p:inputText>
+
+							<p:outputLabel value="Mensal:" for="valorMensal" />
+							<p:inputText id="valorMensal"
+								value="#{locacaoBean.locacao.valorTotal}" size="40"
+								required="false" />
+
 
 
 							<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 								closable="false" resizable="false" showHeader="false">
 								<p:graphicImage value="/imagens/loading1.gif" />
 							</p:dialog>
-
-
-
-
 						</p:panelGrid>
 						<br></br>
 						<p:commandButton value="Incluir"
