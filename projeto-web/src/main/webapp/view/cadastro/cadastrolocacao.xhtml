@@ -35,23 +35,26 @@
 							<p:inputText id="cadastroNome"
 								value="#{locacaoBean.cliente.nome}" size="40" required="true" />
 							<p:outputLabel for="dataInicio" value="Data Inicio:" />
-							<p:calendar id="dataInicio" value="#{locacaoBean.dataInicio}" />
+							<p:calendar id="dataInicio" value="#{locacaoBean.dataInicio}">
+							<p:ajax  process="dataInicio dataFim" update="valorMensal" />
+							</p:calendar>
+							
 							<p:outputLabel for="dataFim" value="Data Fim:" />
 							<p:calendar id="dataFim" value="#{locacaoBean.dataFim}">
-								<p:ajax event="dateSelect"
-									listener="#{locacaoBean.CalcularDiarias()}" update="msg" />
+								<p:ajax event="dateSelect" process="dataFim dataInicio"
+									listener="#{locacaoBean.CalcularDiarias()}" update="valorMensal" />
 							</p:calendar>
 							<p:outputLabel value="Diária:" for="cadastroValor" />
 							<p:inputText id="cadastroValor"
-								value="#{locacaoBean.valorDiaria}" size="40" required="true">							
+								value="#{locacaoBean.valorDiaria}" size="40" required="true">	
+								<p:ajax event="change" process="@this"
+									listener="#{locacaoBean.calcularValorMensal()}" update="valorMensal" />						
 							</p:inputText>
 
 							<p:outputLabel value="Mensal:" for="valorMensal" />
 							<p:inputText id="valorMensal"
-								value="#{locacaoBean.locacao.valorTotal}" size="40"
+								value="#{locacaoBean.locacao.valorTotal}" size="40" readonly="true"
 								required="false" />
-
-
 
 							<p:dialog widgetVar="statusDialog" modal="true" draggable="false"
 								closable="false" resizable="false" showHeader="false">

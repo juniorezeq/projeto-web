@@ -35,6 +35,7 @@ public class LocacaoBean implements Serializable {
 	private Date dataInicio;
 	private Date dataFim;
 	private double valorDiaria;
+	int dias;
 
 	private static final long serialVersionUID = 1L;
 
@@ -51,6 +52,16 @@ public class LocacaoBean implements Serializable {
 	
 	@Transacional
 	public String CalcularDiarias(){
+		locacao.converterDataInicio(dataInicio);
+		locacao.converterDataFim(dataFim);
+		dias = locacao.quantidadeDias();
+		return null;
+	}
+	
+	@Transacional
+	public String calcularValorMensal(){
+		dias = locacao.quantidadeDias();
+		locacao.setValorTotal(valorDiaria*dias);
 		return null;
 	}
 
@@ -79,12 +90,11 @@ public class LocacaoBean implements Serializable {
 			locacao.setValorDiaria(valorDiaria);
 			locacao.converterDataInicio(dataInicio);
 			locacao.converterDataFim(dataFim);
-			int dias = locacao.quantidadeDias();
 			locacao.setValorTotal(valorDiaria*dias);
 			locacao.setCliente(cliente);
 		    locacao.setDataRegistro(locacao.getDataInicio());
 		    locacaoDao.adiciona(locacao);
-			mensagemSucesso("Cadastrado com sucesso" + "foram : " + locacao.quantidadeDias() + " dias");
+			mensagemSucesso("Cadastrado com sucesso!  " +  locacao.quantidadeDias() + " dias");
 			limpar();
 			return null;
 		}catch (Exception e) {
@@ -92,7 +102,6 @@ public class LocacaoBean implements Serializable {
 			return null;
 				}
 		}
-	
 	
 
 
