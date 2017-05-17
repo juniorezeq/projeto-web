@@ -59,7 +59,7 @@ public class LocacaoBean implements Serializable {
 	}
 	
 	@Transacional
-	public String calcularValorMensal(){
+	public String calcularValorTotal(){
 		dias = locacao.quantidadeDias();
 		locacao.setValorTotal(valorDiaria*dias);
 		return null;
