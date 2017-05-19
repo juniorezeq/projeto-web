@@ -1,6 +1,8 @@
 package br.com.fsma.projeto_web.bean;
 
 import java.io.Serializable;
+import java.time.Clock;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,7 +44,7 @@ public class LocacaoBean implements Serializable {
 	@PostConstruct
 	public void init() {
 		System.out.println("LocacaoBean.init();");
-		locacao = new Locacao();
+		limpar();		
 	}
 
 	@Transacional
@@ -50,7 +52,7 @@ public class LocacaoBean implements Serializable {
 		return "/view/cadastro/cadastrolocacao.xhtml?faces-redirect=true";
 	}
 	
-	@Transacional
+	
 	public String CalcularDiarias(){
 		locacao.converterDataInicio(dataInicio);
 		locacao.converterDataFim(dataFim);
@@ -58,8 +60,10 @@ public class LocacaoBean implements Serializable {
 		return null;
 	}
 	
-	@Transacional
-	public String calcularValorMensal(){
+	
+	public String calcularValorTotal(){
+		locacao.converterDataInicio(dataInicio);
+		locacao.converterDataFim(dataFim);		
 		dias = locacao.quantidadeDias();
 		locacao.setValorTotal(valorDiaria*dias);
 		return null;
@@ -70,9 +74,13 @@ public class LocacaoBean implements Serializable {
 		return "/view/alteracao/alteracaolocacao.xhtml?faces-redirect=true";
 	}
 
-	@Transacional
+	
 	public String limpar() {
 		locacao = new Locacao();
+		valorDiaria = 0.00;
+		Date dataAtual =  new Date(System.currentTimeMillis());
+		locacao.converterDataInicio(dataAtual);
+		locacao.converterDataFim(dataAtual);
 		return null;
 	}
 
@@ -92,7 +100,8 @@ public class LocacaoBean implements Serializable {
 			locacao.converterDataFim(dataFim);
 			locacao.setValorTotal(valorDiaria*dias);
 			locacao.setCliente(cliente);
-		    locacao.setDataRegistro(locacao.getDataInicio());
+		    locacao.setDataRegistro(LocalDate.now());
+		    System.out.println(locacao.getDataRegistro());
 		    locacaoDao.adiciona(locacao);
 			mensagemSucesso("Cadastrado com sucesso!  " +  locacao.quantidadeDias() + " dias");
 			limpar();
