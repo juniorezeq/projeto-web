@@ -110,6 +110,7 @@ public class LocacaoBean implements Serializable {
 			mensagemErro("erro ao incluir locacao");
 			return null;
 				}
+	
 		}
 	
 
